@@ -1,0 +1,24 @@
+.product {
+    width: 20%;
+
+    border-width:2px;
+    border-style:solid;
+    border-color:black;
+
+    margin-top: 20px;
+    margin-left: 40px;
+    margin-right: 40px;
+
+    padding-top: 25px;
+    padding-bottom: 25px;
+
+    text-align: center;
+}
+
+.label {
+    width: 100px;
+}
+
+.attributeFields {
+    display: none;
+}
