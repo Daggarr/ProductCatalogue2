@@ -1,10 +1,6 @@
 <?php
 
-use App\Repositories\ProductsRepository;
-use App\Repositories\UsersRepository;
 use App\View;
-use DI\Container;
-use function DI\create;
 
 session_start();
 require_once 'vendor/autoload.php';
@@ -29,7 +25,6 @@ $templateEngine = new \Twig\Environment($loader);
 
 $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
 
-$container = new Container();
 
 switch ($routeInfo[0]) {
     case FastRoute\Dispatcher::NOT_FOUND:
@@ -43,9 +38,7 @@ switch ($routeInfo[0]) {
 
         [$controller, $method] = explode('@',$handler);
         $controller ='App\Controllers\\'.$controller;
-
-        $controller = $container->get($controller);
-
+        $controller = new $controller;
         $response = $controller->$method($vars);
 
         if ($response instanceof View)

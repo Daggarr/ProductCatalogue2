@@ -27,18 +27,20 @@
     <br>
 
     <form method="post" id="deleteForm" action="/delete">
-        <div class="d-inline-block product">
-            <input type="checkbox" class="delete-checkbox" name="productId[]" value="{id1}">
-            <p>
-                JVC200123
-                <br>
-                Acme DISC
-                <br>
-                1.00 $
-                <br>
-                700 MB
-            </p>
-        </div>
+        {% for product in products.getProducts %}
+            <div class="d-inline-block product">
+                <input type="checkbox" class="delete-checkbox" name="productId[]" value={{ product.getId }}>
+                <p>
+                    {{ product.getSku }}
+                    <br>
+                    {{ product.getName }}
+                    <br>
+                    {{ product.getPrice }} $
+                    <br>
+                    {{ product.getAttribute }}: {{ product.getAttributeValue }}
+                </p>
+            </div>
+        {% endfor %}
     </form>
 
 </body>

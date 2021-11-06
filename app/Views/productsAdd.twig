@@ -20,7 +20,7 @@
         <div class="container-fluid">
             <a class="navbar-brand">Products Add</a>
             <div class="d-flex">
-                <button type="button" id="submit-btn" class="btn btn-outline-light mx-3" onclick="document.getElementById('product_form').submit();">Save</button>
+                <button type="button" id="submit-btn" class="btn btn-outline-light mx-3">Save</button>
                 <a href="/"><button type="button" class="btn btn-outline-light mx-3">Cancel</button></a>
             </div>
         </div>
@@ -33,7 +33,7 @@
                 <label for="sku" class="col-form-label">SKU:</label>
             </div>
             <div class="col-auto">
-                <input type="text" id="sku" name="sku" class="form-control">
+                <input type="text" id="sku" name="sku" class="form-control required">
             </div>
         </div>
 
@@ -42,7 +42,7 @@
                 <label for="name" class="col-form-label">Name:</label>
             </div>
             <div class="col-auto">
-                <input type="text" id="name" name="name" class="form-control">
+                <input type="text" id="name" name="name" class="form-control required">
             </div>
         </div>
 
@@ -51,12 +51,12 @@
                 <label for="price" class="col-form-label">Price ($):</label>
             </div>
             <div class="col-auto">
-                <input type="text" id="price" name="price" class="form-control">
+                <input type="text" id="price" name="price" class="form-control required">
             </div>
         </div>
 
-        <select class="form-select w-25 m-5" id="productType">
-            <option selected>Select Product Type</option>
+        <select class="form-select w-25 m-5" name="type" id="productType">
+            <option value="default" selected>Select Product Type</option>
             <option value="DVD">DVD</option>
             <option value="Book">Book</option>
             <option value="Furniture">Furniture</option>
@@ -71,7 +71,7 @@
                     <label for="size" class="col-form-label">Size (MB):</label>
                 </div>
                 <div class="col-auto">
-                    <input type="text" id="size" name="size" class="form-control">
+                    <input type="text" id="size" name="size" class="form-control DVD">
                 </div>
             </div>
         </div>
@@ -85,7 +85,7 @@
                     <label for="weight" class="col-form-label">Weight (KG):</label>
                 </div>
                 <div class="col-auto">
-                    <input type="text" id="weight" name="weight" class="form-control">
+                    <input type="text" id="weight" name="weight" class="form-control Book">
                 </div>
             </div>
         </div>
@@ -99,7 +99,7 @@
                     <label for="height" class="col-form-label">Height (CM):</label>
                 </div>
                 <div class="col-auto">
-                    <input type="text" id="height" name="dimensions[]" class="form-control">
+                    <input type="text" id="height" name="dimensions[]" class="form-control Furniture">
                 </div>
             </div>
 
@@ -108,7 +108,7 @@
                     <label for="width" class="col-form-label">Width (CM):</label>
                 </div>
                 <div class="col-auto">
-                    <input type="text" id="width" class="form-control">
+                    <input type="text" id="width" name="dimensions[]" class="form-control Furniture">
                 </div>
             </div>
 
@@ -117,7 +117,7 @@
                     <label for="length" class="col-form-label">Length (CM):</label>
                 </div>
                 <div class="col-auto">
-                    <input type="text" id="length" name="dimensions[]" class="form-control">
+                    <input type="text" id="length" name="dimensions[]" class="form-control Furniture">
                 </div>
             </div>
         </div>
@@ -125,19 +125,92 @@
     </form>
 
 <script type="text/javascript">
-    document.querySelector("#productType").addEventListener("change", function (){
+    document.querySelector("#productType").addEventListener("change", function ()
+    {
         let divs = document.getElementsByClassName("attributeFields");
 
         for (let i = 0; i < divs.length; i++)
         {
             divs[i].style.display = "none";
-            divs[i].setAttribute('name', '');
         }
 
-        document.getElementById(this.value).style.display = "block";
-        document.getElementById(this.value).setAttribute('name', 'attributeValue');
+        let productType = document.getElementById("productType");
+
+        document.getElementById(productType.value).style.display = "block";
     });
 
+    document.querySelector("#submit-btn").addEventListener("click", function ()
+    {
+
+        if (checkType() && checkEmpty() && checkDataType())
+        {
+            document.getElementById('product_form').submit();
+        }
+    });
+
+    function checkType()
+    {
+        if (document.getElementById("productType").value === "default")
+        {
+            alert("Select product type");
+            return false;
+        }
+
+        return true;
+    }
+
+    function checkEmpty()
+    {
+        let requiredInputs = document.getElementsByClassName("required");
+
+        for (let k = 0; k < requiredInputs.length; k++)
+        {
+            if (requiredInputs[k].value === "")
+            {
+                alert("Please, submit required data");
+                return false;
+            }
+        }
+
+        let typeToCheck = document.getElementById("productType").value;
+
+        let inputs = document.getElementsByClassName(typeToCheck);
+
+        for (let i = 0; i < inputs.length; i++)
+        {
+            if (inputs[i].value === "")
+            {
+                alert("Please, submit required data");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    function checkDataType()
+    {
+        if (isNaN(document.getElementById("price").value) === true)
+        {
+            alert("Please, provide the data of indicated type");
+            return false;
+        }
+
+        let typeToCheck = document.getElementById("productType").value;
+
+        let inputs = document.getElementsByClassName(typeToCheck);
+
+        for (let i = 0; i < inputs.length; i++)
+        {
+            if (isNaN(inputs[i].value) === true)
+            {
+                alert("Please, provide the data of indicated type");
+                return false;
+            }
+        }
+
+        return true;
+    }
 </script>
 
 </body>
